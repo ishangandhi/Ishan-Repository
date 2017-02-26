@@ -1,0 +1,10 @@
+1,Mark,HR,1000
+2,Peter,SALES,1200
+3,Henry,HR,1500
+4,Adam,IT,2000
+5,Steve,IT,2500
+6,Brian,IT,2700
+7,Michael,HR,3000
+8,Steve,SALES,10000
+9,Peter,HR,7000
+10,Dan,IT,6000

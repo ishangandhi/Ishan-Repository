@@ -1,0 +1,11 @@
+1. Load file fruits.txt from hdfs to pig.
+A = load 'SL/fruits.txt';
+
+2. Convert Line into 'word' 
+B = foreach A generate flatten(TOKENIZE((chararray)$0)) as word;
+
+3. Group by 'word'
+C = group B by word;
+
+4. Count 
+D = foreach C generate COUNT(B), group;

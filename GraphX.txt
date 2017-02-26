@@ -1,0 +1,71 @@
+Graph ===> A set of vertices and edges
+
+Load Required Libraries.
+import org.apache.spark.graphx._
+import org.apache.spark.rdd.RDD
+
+1. Create Vertex Array.
+val vertexArray = Array(
+(1L, ("Aaron",28)),
+(2L,("Michael",27)),
+(3L,("Joss",66)),
+(4L,("Edward",55)),
+(5L,("James",34)),
+(6L,("David",58))
+)
+
+2. Create Edge Array.
+val edgeArray = Array(
+Edge(2L, 1L, 7),
+Edge(2L, 4L, 2),
+Edge(3L, 2L, 4),
+Edge(3L, 6L, 3),
+Edge(4L, 1L, 1),
+Edge(5L, 2L, 2),
+Edge(5L, 3L, 8),
+Edge(5L, 6L, 3)
+)
+
+3.Create vertex RDD
+val vertexRDD = sc.parallelize(vertexArray)
+
+4. Create edge RDD
+val edgeRDD = sc.parallelize(edgeArray)
+
+5. Create Graph
+val graph = Graph(vertexRDD, edgeRDD)
+
+6. Verify Graph => Vertices
+graph.vertices.collect().foreach(println)
+
+7. Verify => Edges
+graph.edges.collect().foreach(println)
+======================================
+
+8. Reverse Graph
+val rgraph = graph.reverse
+
+9. verify 
+rgraph.vertices.collect().foreach(println)
+rgraph.edges.collect().foreach(println)
+
+========================================
+10. SUBGRAPH     note: vpred => edges
+=======================================
+Age > 35
+val subgraph = graph.subgraph(vpred = (id, attr) => attr._2 > 35)
+
+11. Verify edge
+subgraph.edges.collect().foreach(println)
+
+12. Verify vertixes
+subgraph.vertices.collect().foreach(println)
+
+13. SubGraph: Source id > 3
+val sgraph = graph.subgraph(epred = e.toInt => e.srcId > 3)
+ 
+14. SubGraph: Dest ID > 3
+val sgraph = graph.subgraph(epred = e => e.dstId >3)
+
+15. SubGraph: weight > 3
+val sgraph = graph.subgraph(epred = e => e.attr > 3)

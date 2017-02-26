@@ -1,0 +1,33 @@
+1. Import Required Libraries
+import org.apache.spark.mllib.linalg.Vectors
+import org.apache.spark.mllib.clustering.KMeans
+
+2. Load Training Data
+val trainingData  = sc.textFile("train.txt")
+trainingData.collect().foreach(println)
+
+3. Parse Training Data (convert string RDD to vector RDD)
+val parsedData = trainingData.map(s => Vectors.dense(s.split(" ").map(x => x.toDouble)))
+
+4. Specify No of Iterations and Clusters
+val numClusters = 2
+val numIterations = 10
+
+5. Train the Model
+val kmeansModel = KMeans.train(parsedData, numClusters, numIterations)
+
+6. Check Cluster Centers
+kmeansModel.clusterCenters
+
+7. Load Test Data
+val testData = sc.textFile("test.txt")
+
+8. Parse Test Data
+val parsedTestData = testData.map(s => Vectors.dense(s.split(" ").map(x => x.toDouble)))
+
+9. Apply Model to test Data
+val result = kmeansModel.predict(parsedTestData)
+
+10. Check Cluster number of a Vector
+val v = Vectors.dense(1,1,1)
+kmeansModel.predict(v)

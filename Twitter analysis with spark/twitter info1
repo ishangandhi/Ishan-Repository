@@ -1,0 +1,26 @@
+numeric_id: A unique id number for every profile.
+Verified: Status of id verified or not.
+profile_sidebar_fill_color: The color for sidebar of profile.
+profile_text_color: The color of Text for every profile.
+followers_count:Total number of followers of each celebrity.
+Protected: Profiles are protected or not.
+Location: Current location mentioned in the profile.
+profile_background_color: Background color of the profile.
+utc_offset: The difference in hours and minutes from Universal Time (UTC) for their current location.
+statuses_count:Total status count of each celebrity.
+Description: The status description of a person.
+friends_count: Total Friends of Celebrities
+profile_link_color: The color of profile link.
+profile_image_url: Image URL of the profile.
+Notifications: The notification of the profile.
+profile_background_image_url: Background image url
+screen_name
+profile_background_tile
+favourites_count
+name: name of the celebrity
+url: Profile URL.
+created_at: when the profile is created
+time_zone:
+profile_sidebar_border_color:
+following: To whome they are following.
+gender

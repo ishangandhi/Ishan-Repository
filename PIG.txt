@@ -1,0 +1,41 @@
+pig using  web console (grunt shell) - Type pig
+
+1.Upload 2 files emp.txt and dept.txt to hdfs.
+
+2.Load data from HDFS to  pig.
+emp = load 'pig/emp.txt' using PigStorage(',');
+
+3. Dump data (to check output)
+dump emp;
+
+4. ForEach clause in new relation B ( select data from  column 1 and 3).
+B = foreach emp generate $0, $3;
+dump B;
+
+5. Create schema for emp.txt file in relation emp
+emp = load 'pig/emp.txt' using PigStorage(',') as (emp_id:int, emp_name:chararray, emp_dept:chararray, emp_salary:int);
+
+6. Describe cmd to check  schema of relation.
+describe emp
+
+7. get list of employees whos salary is greater than 3000.
+moresalary = filter emp by emp_salary > 3000;
+
+8. Order employees by salary  in asc order
+orderemp = order emp by emp_salary;
+
+9. Order employees by salary  in desc order
+orderemp = order emp by emp_salary desc;
+
+10. GroupBy <clause>  dept.
+grpemp = group  emp by emp_dept; 
+
+11. Split contents of emp relation into 2 relations.
+split emp into  less5k if emp_salary < 5000,  more5k if emp_salary  > 5000;
+
+12. Load dept.txt file in pig and give schema
+dept = load 'pig/dept.txt' using PigStorage(',') AS (d_id:chararray, d_fullname:chararray);
+
+13. Create JOIN between emp and dept relations
+empjoin = join emp by emp_dept, dept by d_id;
+

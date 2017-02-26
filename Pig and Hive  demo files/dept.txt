@@ -1,0 +1,3 @@
+HR,Human Resource
+SALES, Sales Department
+IT, Information Technology

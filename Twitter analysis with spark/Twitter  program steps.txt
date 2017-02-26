@@ -1,0 +1,57 @@
+1. Load file into RDD
+val profile = sc.textFile("profiles.txt")
+
+2. Verify and Count lines.
+profile.count()
+
+3. Check Sample Data.
+profile.first()
+
+4. Lines containing the word Twitter.
+val twitter = profile.filter(x => x.contains("twitter"))
+twitter.count()
+
+5. Split the Tab separated Line.
+val profilerdd = profile.map(x => x.split("\t"))
+
+6. No. of people who verified their profiles.
+val verified = profilerdd.filter(x => x(1) == "True")
+verified.collect()
+val notverified = profilerdd.filter(x => x(1) == "False")
+
+7.Find the total number of profiles that have less than 10000 followers
+val follower = profilerdd.filter(x => x(4).toInt < 10000)
+
+8. Top 5 Location where most people  belongs to.
+val location = profilerdd.map(x => x(6)).map(x => (x,1)).reduceByKey((x,y) => x + y).sortBy(x => x._2, false)
+location.take(5).foreach(println)
+
+9. Top 5 people with most friends
+val friends = profilerdd.map(x => (x(19), x(11).toInt)).sortBy(x => x._2, false)
+friends.take(5).foreach(println)
+
+10. Top 5 males with most friends
+val mfriends = profilerdd.filter(x => x(25) == "m").map(x => (x(19), x(11).toInt)).sortBy(x => x._2, false)
+mfriends.take(5).foreach(println)
+
+11. Top 5 females with most friends
+val ffriends = profilerdd.filter(x => x(25) == "f").map(x => (x(19), x(11).toInt)).sortBy(x => x._2, false)
+ffriends.take(5).foreach(println)
+
+12. Top 5 male profiles with most followers.
+val mfollowers = profilerdd.filter(x => x(25) == "m").map(x => (x(19), x(4).toInt)).sortBy(x => x._2, false)
+mfollowers.take(5).foreach(println)
+
+13. Top 5 female profiles with most followers.
+val ffollowers = profilerdd.filter(x => x(25) == "f").map(x => (x(19), x(4).toInt)).sortBy(x => x._2, false)
+ffollowers.take(5).foreach(println)
+
+14.No of profiles with unspecified gender.
+val ungender = profilerdd.filter(x => x(25) != "m" && x(25) != "f")
+
+15. Top 5 timezone with most active people.
+val timezone = profilerdd.map(x => (x(22), 1)).reduceByKey((x,y) => x + y).sortBy(x => x._2,false)
+timezone.take(5).foreach(printlnt)
+
+
+

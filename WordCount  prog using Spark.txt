@@ -1,0 +1,22 @@
+1. Load the file
+val input = sc.textFile("SL/fruits.txt")
+
+2. Verify the RDD
+input.count()
+
+3. Show content of the file
+input.collect()
+
+4. Convert the Lines into words
+val inwords = input.flatMap(x => x.split(" "))
+inwords.collect()
+
+5. Tokenize the word (eg  apple,1  banana,1,...)
+val mwords = inwords.map(w => (w,1))
+mwords.collect()
+
+6. ReducebyKey tranformation to add key values
+val result = mwords.reduceByKey((x,y) => x + y)
+result.collect()
+
+

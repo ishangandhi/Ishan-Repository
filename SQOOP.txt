@@ -1,0 +1,38 @@
+username: labuser
+password: simplilearn
+
+go to SQL Command-shell: mysql -h 172.31.54.174 -u labuser -p simplilearn
+ 
+Note: Use sqoop commands outside SQL shell
+
+user database 'simplilearn':-    use simplilearn
+
+Sqoop commands: 
+1) List all databases.
+sqoop list-databases --connect jdbc:mysql://172.31.54.174 --username labuser -P 
+
+(--driver com.mysql.jdbc.Driver) ----->  not required
+
+2) List all tables for a particular database.
+sqoop list-tables --connect jdbc:mysql://172.31.54.174/simplilearn --username labuser -P
+
+3) Import data from database to HDFS. (mapper m = 1 coz no primary key)
+sqoop import --connect jdbc:mysql://172.31.54.174/simplilearn --driver com.mysql.jdbc.Driver --username labuser -P --table ishan_emp123 -m 1
+
+4) Import data from database to HDFS into a particular target directory
+sqoop import --connect jdbc:mysql://172.31.54.174/simplilearn --driver com.mysql.jdbc.Driver --username labuser -P --table ishan_emp123 -m 1 --target-dir dest_dir23
+
+5) Import the data using split-by option
+sqoop import --connect jdbc:mysql://172.31.54.174/simplilearn --driver com.mysql.jdbc.Driver --username labuser -P --table ishan_emp123 --split-by empid --target-dir split_dir23
+
+6) Get data from query
+sqoop import --connect jdbc:mysql://172.31.54.174/simplilearn --driver com.mysql.jdbc.Driver --username labuser -P --table ishan_emp123 -m 1 --target-dir dest_dir25 --query "select * from emp123 where empid = 1"
+
+7) Export data from hdfs to my sql
+sqoop export --connect jdbc:mysql://172.31.54.174/simplilearn --driver com.mysql.jdbc.Driver --username labuser -P --table emp_export23 --export-dir sqoop_dir
+
+8) Query a table on SQL using  Sqoop
+sqoop import --connect jdbc:mysql://172.31.54.174/simplilearn --driver com.mysql.jdbc.Driver --username labuser -P --query "select * from emp_export23 where empid = 1 AND \$CONDITIONS" -m 1 --target-dir sqoop_p
+
+9) evaluate a query on Sqoop (no actual execution takes place  on hdfs)
+sqoop eval --connect jdbc:mysql://172.31.54.174/simplilearn --driver com.mysql.jdbc.Driver --username labuser -P --query "select * from emp_export23 where empid = 5"

@@ -1,0 +1,90 @@
+1. Load Data.
+val input = sc.textFile("emp_table.txt")
+
+2. Create schema for data.
+
+a) Create Case Class:
+case class employee(id:Int, name:String, salary:Int, dept:String)
+
+3. Split data based on ","
+val input_split = input.map(x => x.split(","))
+
+4. Convert RDD[Array[String]] to RDD[employee]
+val emprdd = input_split.map(e => employee(e(0).toInt, e(1), e(2).toInt, e(3)))
+
+5. Create Dataframe
+val empDF = emprdd.toDF()
+
+6. Show content of dataframe
+empDF.show()
+
+Check Schema of DF
+empDF.printSchema()
+
+7. Register DF as Table
+empDF.registerTempTable("emp123")
+
+8. Find employee with salary between 2000 and 5000
+val result = sqlContext.sql("select * from emp123 where salary >= 2000 and salary <= 5000")
+result.show()
+
+======================================
+       Method 2
+======================================
+1.Import Required Liabraries
+import org.apache.spark.sql.Row
+import org.apache.spark.sql.types._
+
+
+
+
+2.Specify Schema.
+val schema = StructType(Array(
+StructField("id", IntegerType, true),
+StructField("name", StringType, true),
+StructField("salary", IntegerType, true),
+StructField("Dept", StringType, true)
+)
+)
+
+3. Create Row  RDD 
+val rowRDD = input.map(line => line.split(",")).map(e => Row(e(0).toInt, e(1), e(2).toInt, e(3)))
+
+4. Create Data Frame.
+val empDF = sqlContext.createDataFrame(rowRDD, schema)
+
+5. Register DF as a temp table
+empDF.registerTempTable("emp111")
+
+6. Find employee with salary between 2000 and 5000
+val result = sqlContext.sql("select * from emp111 where salary >= 2000 and salary <= 5000")
+
+==================================================
+
+Create DF from JSON file
+val peopleDF  = sqlContext.read.json("<file path>")
+
+peopleDF.printSchema()
+peopleDF.show()
+====================================================
+Operations on DataFrame
+
+1.Select operationn
+peopleDF.select(peopleDF("name")),show()
+
+2. Filter operation
+people.DF.filter(peopleDF("age") > 25).show()
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 

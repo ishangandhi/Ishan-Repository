@@ -1,0 +1,8 @@
+1. Check Sample  data
+profile.first()
+
+2. Lines Contains the word Twitter
+val twitter = profile.filter(line => line.contains("twitter"))
+twitter.count()
+
+

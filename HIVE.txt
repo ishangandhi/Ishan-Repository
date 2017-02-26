@@ -1,0 +1,127 @@
+1. create database.
+create database ish2017;
+
+2. Check  database created file path
+hadoop fs -ls /apps/hive/warehouse/ish2017.db
+
+3. select a database.
+use  ish2017;
+
+4. create a table based on emp.txt (CSV) (internal table)
+create table emp (e_id int, e_name string, e_dept string, e_salary int) ROW FORMAT DELIMITED FIELDS TERMINATED BY ',';
+
+5. Load  the data from hdfs to hive
+load data inpath 'hive/emp.txt' into table emp;
+
+6. View table emp. 
+select * from emp;
+
+7. create and load dept table to hive 
+create  table dept(d_name  string, d_fullname string) row format  delimited fields terminated by ',';
+load data inpath 'hive/dept.txt' into table dept;
+
+8. JOIN (code to be verified)
+select e_name, d_fullname from emp JOIN dept as ON e_dept = d_name;
+
+9. Order  by clause
+select * from emp order by e_dept;
+
+STATIC PARTIONING
+=================
+
+10. Create a table.
+Create  table emp_spart(e_id int, e_name string, e_salary int) partitioned by(e_dept string) row format delimmited fields terminated by ',';
+
+11. Load  the  data.
+load data local inpath '/home/biadmin/data/emp_hr.txt' into table emp_spart partition(e_dept = 'HR');
+load data local inpath '/home/biadmin/data/emp_hr.txt' into table emp_spart partition(e_dept = 'IT');
+load data local inpath '/home/biadmin/data/emp_hr.txt' into table emp_spart partition(e_dept = 'SALES');
+
+12 Select data query
+select * from emp_spart where e_salary  > 2000;
+==================
+13. create external table.
+create  external table e_table(
+user_id int,
+name string,
+user_type string,
+gender string,
+couuntry string,
+state string,
+freq int,
+year int,
+month int,
+day int
+) row format delimited fields terminated by ','
+location '<file location>';
+
+14. drop table e_table and check the file location that the file is not deleted, like in case of internal table
+
+==============================
+DYNAMIC PARTITIONING
+==============================
+
+15. Create Staging Tabe.
+
+create external table emp_stage(
+e_id int, e_name string, e_dept string, e_salary int)
+row format delimited fields terminated by ','
+location '/user/ishan2303_gmail/hive';
+
+16. Create Partioned Table.
+create table emp_dpart(
+e_id int, e_name  string, e_salary int) partitioned by (e_dept string)
+row  format delimited fields terminated by ',';
+
+17. set  dynamic partitioning parameters on Hive.
+SET hive.exec.dynamic.partition = true;
+SET hive.exec.dynamic.partition.mode = nonstrict;
+
+18. Insert  data from staging table to partioned table.
+insert into  emp_dpart
+partition (e_dept)
+select  e_id, e_name, e_salary, e_dept from emp_stage;
+
+=======================================================
+BUCKETING
+======================================================
+
+1. Set Parameter.
+SET hive.enforce.bucketing = true;
+
+2. Create bucketed table.
+create table b_emp25(
+e_id int,
+e_name string,
+e_dept string,
+e_salary int)
+CLUSTERED BY (e_id) INTO 4 BUCKETS
+row format delimited fields terminated by ',';
+
+3. Load data into  Bucketed table.
+insert into b_emp select * from emp_stage;
+
+4. View data only from lets say Bucket 1.
+select * from b_emp TABLESAMPLE(BUCKET 1 out of 4 on e_id);
+
+=====================================
+PARTITIONING WITH  BUCKETING
+=====================================
+
+1. Create table
+create table p_b_emp
+(e_id int,  e_name string, e_salary int)
+PARTITIONED  BY (e_dept string)
+CLUSTERED BY (e_id) into 2 buckets
+row format delimited fields terminated by ',';
+
+2. Insert data 
+insert into p_b_emp
+partition (e_dept) select e_id, e_name, e_salary, e_dept from emp_stage;
+
+
+
+
+
+
+

@@ -1,0 +1,156 @@
+1. Get into Spark shell (scala)
+spark-shell
+
+2. Load file in RDD
+val filerdd = sc.textFile("SL/fruits.txt")
+
+3. Count rows in the file
+filerdd.count()
+
+4. Show content of the file
+filerdd.collect()
+==================================
+Transformations: 1) MAP
+==================================
+5.(input and List data)
+val l = List("Hello","World","Welcome","to","Scala")
+
+6. Load data into rdd
+val keyword = sc.parallelize(l)
+
+7. Count length of elements in input data
+val result  = keyword.map(x => x.length)
+
+result.collect
+========================================
+2) FLATMAP
+========================================
+
+8. Create RDD  and then first do Map then Flat Map.
+val input = sc.parallelize(1 to 3)
+val maprdd = input.map(x => 1 to x)
+input.collect()
+maprdd.collect()
+
+val fmaprdd = input.flatMap(x => 1 to x)
+fmaprdd.collect()
+
+========================================
+  3) FILTER
+=========================================
+val input = sc.parallelize(1 to 10)
+val even = input.filter( x => x%2 == 0)
+val odd = input.filter( x => x%2 != 0)
+
+===========================================
+reduceByKey
+===========================================
+val keywords = List("Hello","Hello","World","World")
+val input = sc.parallelize(keywords)
+
+val rdd1 = input.map(x => (x, x.length))
+val result = rdd1.reduceByKey((x,y) => x + y)
+result.collect()
+
+=====================================
+     ZIP
+====================================
+val l = List("Hello","World","Welcome", "to", "Scala")
+val rdd1 = sc.parallelize(l)
+val rdd2 = rdd1.map(x => x.length)
+rdd1.zip(rdd2).collect()
+
+=====================================
+      DISTINCT
+=====================================
+val l = List("Hello","World","Welcome", "to", "Scala")
+val rdd1 = sc.parallelize(l)
+rdd1.distinct().collect()
+=======================================
+   groupByKey
+========================================
+val l = List("Hello","World","Welcome", "to", "Scala")
+val rdd1 = sc.parallelize(l)  
+val rdd2 = rdd1.map(x => (x,x.length))
+rdd2.groupByKey.collect()
+
+=================================================
+     MapValues
+=================================================
+val l = List("Hello","World","Welcome", "to", "Scala")
+val rdd1 = sc.parallelize(l)
+val rdd2 = rdd1.map(x => (x, x.length))
+rdd2.mapValues(v => v * 2).collect()
+
+=====================================================
+    SORTING  (sortByKey)
+=====================================================
+
+val l = List(2,"all"), (6,"but"), (7,"between"), (1,"here")
+val input  = sc.parallelize(l)
+input.collect().foreach(println)
+input.sortByKey(ascending = false).collect().foreach(println)
+
+SortBy
+input.sortBy(x => x._2.collect().foreach(println)
+
+============================================
+     SET Operations
+=============================================
+val rdd1 = sc.parallelize(List("lion","tiger","horse","cat"))
+val rdd2 = sc.parallelize(List("lion", "tiger", "dog", "cat"))
+
+1. UNION
+rdd1.union(rdd2).collect()
+
+2. Intersection
+rdd1.intersection(rdd2).collect()
+
+3. Subtract
+rdd1.subtract(rdd2).collect()
+rdd2.subtract(rdd1).collect()
+
+===============================================
+		JOINS
+==============================================
+val rdd1 = sc.parallelize(List (("hello",1), ("world",4), ("scala",3)))
+val rdd2 = sc.parallelize(List (("hello",2),("hello",3), ("python",4)))
+
+1. Inner Join
+rdd1.join(rdd2).collect
+
+2. Left Outer  Join
+rdd1.leftOuterJoin(rdd2).collect()
+
+3. Right Outer Join
+rdd1.rightOuterJoin(rdd2).collect()
+
+4. Full Outer Join
+
+rdd1.fullOuterJoin(rdd2).collect()
+
+============================================
+             ACTIONS
+============================================
+
+1. COUNT.
+rdd1.count()
+
+2. COLLECT.
+rdd1.collect()
+
+3. FIRST - gives first element in RDD.
+rdd1.first()
+
+4. CollectAsMap.
+rdd1.collectAsMap()
+
+5. countByKey.
+rdd1.countByKey()
+
+
+
+
+
+
+
