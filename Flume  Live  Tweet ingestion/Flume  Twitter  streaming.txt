@@ -1,0 +1,22 @@
+1. Create a new folder to keep your flume configuration file.
+mkdir -p /home/ishan2303_gmail/flume/conf
+
+ cd /home/ishan2303_gmail/flume/conf
+ $touch flume.conf
+ 
+2. Modify the configuration files according to your user name and credentials.
+TwitterAgent.sinks.HDFS.hdfs.path = hdfs://cloudlabns/user/ishan2303_gmail/twitter_data
+ 
+3. Create a new folder in hdfs to get twitter access log
+hadoop fs -mkdir twitter_data
+ 
+4.  check Java
+java -version
+ 
+5. Set JAVA_HOME
+export JAVA_HOME=/usr/bin/java
+export PATH=$JAVA_HOME/bin:$PATH
+ 
+6. Run flume agent with  configuration file
+flume-ng agent --conf /home/ishan2303_gmail/flume/conf -f /home/ishan2303_gmail/flume/conf/flume.conf
+Dflume.root.logger=DEBUG,console -n TwitterAgent
